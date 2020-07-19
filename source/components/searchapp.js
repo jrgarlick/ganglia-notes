@@ -9,14 +9,23 @@ import MarkdownController from './markdowncontroller';
 import Pager from './pager';
 import ErrorBoundary from './errorboundary';
 import solrConf from '../conf/solrconf';
+import Accordion from '../widgets/Accordion';
+import AnchorPass from '../widgets/anchorpass';
 import { SET_FILTER_ACTION,
          CLEAR_FILTERS_ACTION,
          SET_QUERY_ACTION,
          SET_PAGE_ACTION,
+         makeClearFiltersAction,
          makeLoadDocAction } from "../actions";
 
 
 class SearchApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedDoc: null
+    };
+  }
   render() {
     let row2 = null;
     let row3 = null;
@@ -44,47 +53,44 @@ class SearchApp extends Component {
             len={sr.results.length} />
 
           <div className="col-sm-2">
-            {/* <h4>Tags</h4> */}
-            <h5 className="app_vsp15">Tags:</h5>
-            <FacetList facets={sr.facets.tags}
-             handleActions={this.handleActions.bind(this)}
-             fieldname="tags_ss"
-             multiSelect="true" />
+            <Accordion>
+              <div label="Filters">
+                <small><AnchorPass title={"Reset filters"} onClick={this.resetFilters.bind(this)}/></small>
 
-            <h5 className="app_vsp15">Dates:</h5>
-            <FacetList facets={sr.facets.date_range}
-             handleActions={this.handleActions.bind(this)}
-             fieldname="created_dt" />
+                <h5 className="app_vsp15">Tags:</h5>
+                <FacetList facets={sr.facets.tags}
+                handleActions={this.handleActions.bind(this)}
+                fieldname="tags_ss"
+                multiSelect="true" />
 
-            <h5 className="app_vsp15">Mentions:</h5>
-            <FacetList facets={sr.facets.mentions}
-             handleActions={this.handleActions.bind(this)}
-             fieldname="mentions"
-             multiSelect="true" />
+                <h5 className="app_vsp15">Dates:</h5>
+                <FacetList facets={sr.facets.date_range}
+                handleActions={this.handleActions.bind(this)}
+                fieldname="created_dt" />
 
+                <h5 className="app_vsp15">Mentions:</h5>
+                <FacetList facets={sr.facets.mentions}
+                handleActions={this.handleActions.bind(this)}
+                fieldname="mentions"
+                multiSelect="true" />
+              </div>
+            </Accordion>
+
+            <h4 className="app_vsp15"></h4>
+            <Pager numFound={sr.totalFound}
+              start={sr.start}
+              len={sr.results.length}
+              handleActions={this.handleActions.bind(this)}
+              pageSize={sr.pageSize} />
+            <Results searchResults={sr.results} handleActions={this.handleDocActions.bind(this)} />
           </div>
 
-          <Results searchResults={sr.results} handleActions={this.handleDocActions.bind(this)} />
-
-          <div className="col-sm-8">
+          <div className="col-sm-10">
             <ErrorBoundary>
-              <MarkdownController doc={this.selectedDoc} onDocumentChange={this.handleDocUpdated} />
+              <MarkdownController doc={this.state.selectedDoc} onDocumentChange={this.handleDocUpdated.bind(this)} />
             </ErrorBoundary>
           </div>
         </div>;
-
-          // only show pager if required
-          if (sr.start > 0 || sr.totalFound > sr.results.length) {
-            row4 = <div className="row app_vsp05">
-              <div className="col-sm-2">
-                <Pager numFound={sr.totalFound}
-                  start={sr.start}
-                  len={sr.results.length}
-                  handleActions={this.handleActions.bind(this)}
-                  pageSize={sr.pageSize} />
-              </div>
-            </div>
-          }
 
       }
     }
@@ -124,6 +130,10 @@ class SearchApp extends Component {
       alert("ERROR: " + error);   // FIXME very unfriendly
       throw error;    // for stacktrace in console
     });
+
+    this.setState({
+      selectedDoc: document
+    });
   }
 
   handleDocActions(actions) {
@@ -131,9 +141,17 @@ class SearchApp extends Component {
     console.log(actions);
     actions.forEach(act => {
       // this.props.selectedDoc(act.doc);
-      this.selectedDoc = act.doc;
+      this.setState({
+        selectedDoc: act.doc
+      })
       console.log(act.doc);
     });
+  }
+
+  resetFilters() {
+    let queryParams = this.props.queryParams;
+    queryParams.filters = [];
+    this.props.setQueryParams(queryParams);
   }
 
   handleActions(actions) {
@@ -167,28 +185,7 @@ class SearchApp extends Component {
     // now queryParams is fully mutated, set it
     this.props.setQueryParams(queryParams);
   }
-
-  // set or unset a single filter
-  // setFilter(filter, apply) {
-  //
-  //   // clone any existing filters into a new array
-  //   let filters = this.props.queryParams.filters ?
-  //                 this.props.queryParams.filters.slice(0) : [];
-  //
-  //   if (apply && !filters.includes(filter)) {
-  //     // add the new filter
-  //     filters.push(filter);
-  //   }
-  //   else if (!apply) {
-  //     // or remove it
-  //     filters = filters.filter(y => y != filter);
-  //   }
-  //
-  //   this.props.setQueryParams(
-  //     update(this.props.queryParams, { filters: { $set: filters }})
-  //   );
-  // }
-  //
+  
 }
 
 SearchApp.propTypes = {

@@ -6,15 +6,6 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 
 const converter = ConverterFactory();
 
-// class MarkdownEditor extends React.Component {
-//   constructor(props, context) {
-//     super(props);
-//     this.state = {
-//       title: props.doc.title,
-//       text: props.doc.text
-//     }
-//   }
-
 export default function MarkdownEditor(props) {
 
   var handleTitleChange = (event) => {

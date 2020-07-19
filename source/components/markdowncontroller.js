@@ -86,6 +86,8 @@ class MarkdownController extends Component {
         title: "",
         text: ""
       },
+      title: "",
+      text: "",
       viewMode: "edit"
     });
   }
