@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import ConverterFactory from '../utils/converterfactory';
-// import MarkdownView from 'react-showdown';
 import "react-mde/lib/styles/css/react-mde-all.css";
 
 const converter = ConverterFactory();
@@ -18,12 +17,12 @@ export default function MarkdownViewer(props) {
   const size = props.doc.text.length;
 
   return (
-    <div>
+    <div className="mde-preview">
       <h1>{title}</h1>
       <p><small><b>Last Updated:</b> {updatedDate} | <b>Created:</b> {createdDate} | {size} bytes</small></p> 
-      {/* <MarkdownView markdown={props.doc.text}/> */}
-
-      <div dangerouslySetInnerHTML={{__html: converter.makeHtml(props.doc.text)}} />
+      <div className="mde-preview-content">
+        <div dangerouslySetInnerHTML={{__html: converter.makeHtml(props.doc.text)}} />
+      </div>
     </div>
   );
 };

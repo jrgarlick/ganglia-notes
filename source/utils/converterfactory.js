@@ -6,7 +6,6 @@ export default function buildConverter() {
     simplifiedAutoLink: true,
     strikethrough: true,
     tasklists: true,
-    headerLevelStart: 2,
     simpleLineBreaks: true,
     requireSpaceBeforeHeadingText: true,
     disableForced4SpacesIndentedSublists: true
