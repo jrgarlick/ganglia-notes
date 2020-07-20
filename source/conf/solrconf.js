@@ -1,6 +1,6 @@
 const solrConf = {
   solrSearchUrl: "http://localhost:8983/solr/journal",
-  displayFields: ["created_dt","id","title","text"],
+  displayFields: ["updated_dt","created_dt","id","title","text"],
   facetFields: {
     "tags": "tags_ss",
     "mentions": "mentions",

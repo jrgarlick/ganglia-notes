@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = {
   entry: [
     './source/app.js'
@@ -7,15 +8,10 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json']
   },
   module: {
-    loaders: [
-      {
-        test: /(\.ts|\.tsx)$/, 
-        loaders: ["ts-loader"],
-        include: [path.join(__dirname, "source"), path.join(__dirname, "data")] 
-      },
+    rules: [
       { 
         test: /\.css$/, 
         loader: "style-loader!css-loader"
@@ -23,7 +19,8 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader" },
+        loader: "babel-loader"
+      },
       { 
         test: /\.json$/,
         loader: 'json-loader'
@@ -31,3 +28,9 @@ module.exports = {
     ]
   }
 };
+
+      // {
+      //   test: /(\.ts|\.tsx)$/, 
+      //   loaders: ["ts-loader"],
+      //   include: [path.join(__dirname, "source"), path.join(__dirname, "data")] 
+      // },

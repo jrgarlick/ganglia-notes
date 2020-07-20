@@ -47,7 +47,7 @@ class MarkdownController extends Component {
     
      if (!this.state.activeDocument) {
       return <div className="edit-toolbar">
-        <div><button onClick={this.newDocument.bind(this)}>New</button></div>
+        <div><button className="btn" onClick={this.newDocument.bind(this)}>New</button></div>
       </div>;
     }
 
@@ -55,13 +55,13 @@ class MarkdownController extends Component {
 
     if (this.state.activeDocument && viewMode === "view") {
       toolbar = <div className="edit-toolbar">
-        <div><button onClick={this.newDocument.bind(this)}>New</button> <button onClick={this.editDocument.bind(this)}>Edit</button></div>
+        <div><button className="btn" onClick={this.newDocument.bind(this)}>New</button> <button className="btn" onClick={this.editDocument.bind(this)}>Edit</button></div>
       </div>;
       documentPane = <MarkdownViewer doc={this.state.activeDocument}/>
 
     } else if (this.state.activeDocument && viewMode === "edit") {
       toolbar = <div className="edit-toolbar">
-        <div><button onClick={this.saveDocument.bind(this)}>Save</button> <button onClick={this.cancelEditDocument.bind(this)}>Cancel</button></div>
+        <div><button className="btn" onClick={this.saveDocument.bind(this)}>Save</button> <button className="btn" onClick={this.cancelEditDocument.bind(this)}>Cancel</button></div>
       </div>;
       documentPane = 
         <MarkdownEditor
@@ -116,14 +116,14 @@ class MarkdownController extends Component {
     newDoc.text = this.state.text;
     newDoc.tags_ss = this.parseTags('#', this.state.title, this.state.text);
     newDoc.mentions = this.parseTags('@', this.state.title, this.state.text);
+    newDoc.updated_dt = new Date().toISOString();
+
+    this.props.onDocumentChange(newDoc);
 
     this.setState({
       activeDocument: newDoc,
       viewMode: "view"
     });
-
-
-    this.props.onDocumentChange(newDoc);
 
     console.log(newDoc);
   }

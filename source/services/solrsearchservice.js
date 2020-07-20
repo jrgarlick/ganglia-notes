@@ -13,11 +13,31 @@ import capitalize from 'capitalize';
 export function makeSearchService(conf) {
   return (queryParams, setSearchResults) => {
     // convert queryParams into Solr params
+
+    var rawQueryString = queryParams.query;
+    var words = rawQueryString.split(/\s+/);
+    var searchComponents = [];
+    words.forEach((word) => {
+      if (word.startsWith('#')) {
+        word = word.substring(1);
+        searchComponents.push("tags_ss:"+word);
+      } else if (word.startsWith('@')) {
+        word = word.substring(1);
+        searchComponents.push("mentions:"+word);
+      } else {
+        searchComponents.push("(text:"+word+" OR "+"title:"+word+")");
+      }
+    });
+    var queryString = searchComponents.join(" AND ");
+    if (queryString === "") {
+       queryString = "*";
+    }
+
     let solrParams = {
       offset: conf.pageSize * (queryParams.page || 0),
       limit: conf.pageSize,
       sort: conf.displayFields[0]+" desc",
-      query: queryParams.query,
+      query: queryString,
       filter: [],
       fields: conf.displayFields,
       facet: {}

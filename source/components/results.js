@@ -23,10 +23,10 @@ class Results extends Component {
 
   render() {
     const results = this.props.searchResults.map((hit) => {
+      var title = hit.title.replace(/#|@/g, "");
       return <div key={hit.id} className="app_hit">
-        <div><strong><AnchorPass onClick={this.dispatchLoadDocEvent.bind(this)} title={hit.title} value={hit}/></strong></div>
+        <div><strong><AnchorPass onClick={this.dispatchLoadDocEvent.bind(this)} title={title} value={hit}/></strong></div>
         <div className="app_vsp03 text-muted"><em><small>{hit.created_dt}</small></em></div>
-        {/* <div className="app_vsp03">{hit.text.substring(0, 50)+"..."}</div> */}
       </div>;
     });
 

@@ -1,7 +1,11 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-
 import AccordionSection from './AccordionSection';
+
+/*
+* This component is a very simple accordion shamelessly taken from this
+* article: https://www.digitalocean.com/community/tutorials/react-react-accordion-component
+*/
 
 class Accordion extends Component {
   constructor(props) {

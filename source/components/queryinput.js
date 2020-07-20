@@ -29,19 +29,20 @@ class QueryInput extends Component {
 
   onChange(event) {
     var rawQueryString = event.target.value;
-    // var queryString = "";
-    // var words = rawQueryString.split(/\s+/);
-    // words.forEach((word) => {
-    //   if (word.startsWith('#')) {
-    //     word = word.subString(1);
-    //     queryString += "tags_ss:"+word+" ";
-    //   } else {
-    //     queryString += "text:"+word+" ";
-    //   }
-
-    // });
-    console.log("setting query state: "+rawQueryString);
     this.setState({ query: rawQueryString });
+  }
+
+  onEnter(event) {
+    if (event.key === 'Enter') {
+      this.onSubmit(event);
+    }
+  }
+
+  onReset(event) {
+    this.setState({
+      query: ""
+    });
+    this.props.onClickReset();
   }
 
   render() {
@@ -49,8 +50,9 @@ class QueryInput extends Component {
             role="search" onSubmit={this.onSubmit.bind(this)}>
       <div className="input-group col-sm-8">
         <input type="text" className="form-control" placeholder="Search"
-          value={this.state.query} onChange={this.onChange.bind(this)} />
+          value={this.state.query} onChange={this.onChange.bind(this)} onKeyPress={this.onEnter.bind(this)} />
         <div className="input-group-btn">
+          <button className="btn" onClick={this.onReset.bind(this)}><i className="glyphicon glyphicon-remove"></i></button>
           <button className="btn btn-primary" type="submit"><i className="glyphicon glyphicon-search"></i></button>
         </div>
       </div>

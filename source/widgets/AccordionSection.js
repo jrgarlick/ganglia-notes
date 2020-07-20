@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+/*
+* This component is a very simple accordion shamelessly taken from this
+* article: https://www.digitalocean.com/community/tutorials/react-react-accordion-component
+*/
+
 class AccordionSection extends Component {
   constructor(props) {
       super(props);

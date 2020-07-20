@@ -29,22 +29,11 @@ class SearchApp extends Component {
   render() {
     let row2 = null;
     let row3 = null;
-    let row4 = null;
 
     const qp = this.props.queryParams;
     const sr = this.props.searchResults;
 
     if (sr) {
-      // row2 = <div className="row app_vsp05">
-      //   <div className="col-sm-2">
-      //     {/* <strong>Refine search</strong> */}
-      //   </div>
-      //   <Stats qtime={sr.queryTime}
-      //     numFound={sr.totalFound}
-      //     start={sr.start}
-      //     len={sr.results.length} />
-      // </div>;
-
       if (sr.results) {
         row3 = <div className="row app_vsp15">
           <Stats qtime={sr.queryTime}
@@ -57,16 +46,16 @@ class SearchApp extends Component {
               <div label="Filters">
                 <small><AnchorPass title={"Reset filters"} onClick={this.resetFilters.bind(this)}/></small>
 
+                <h5 className="app_vsp15">Dates:</h5>
+                <FacetList facets={sr.facets.date_range}
+                handleActions={this.handleActions.bind(this)}
+                fieldname="created_dt" />
+
                 <h5 className="app_vsp15">Tags:</h5>
                 <FacetList facets={sr.facets.tags}
                 handleActions={this.handleActions.bind(this)}
                 fieldname="tags_ss"
                 multiSelect="true" />
-
-                <h5 className="app_vsp15">Dates:</h5>
-                <FacetList facets={sr.facets.date_range}
-                handleActions={this.handleActions.bind(this)}
-                fieldname="created_dt" />
 
                 <h5 className="app_vsp15">Mentions:</h5>
                 <FacetList facets={sr.facets.mentions}
@@ -99,9 +88,9 @@ class SearchApp extends Component {
 
     return <div className="container">
       <div className="row">
-        <QueryInput initialQuery={qp.query} handleActions={this.handleActions.bind(this)}/>
+        <QueryInput initialQuery={qp.query} handleActions={this.handleActions.bind(this)} onClickReset={this.resetQueryString.bind(this)}/>
       </div>
-      {row2} {row3} {row4}
+      {row3}
       {busy}
     </div>;
   }
@@ -151,6 +140,12 @@ class SearchApp extends Component {
   resetFilters() {
     let queryParams = this.props.queryParams;
     queryParams.filters = [];
+    this.props.setQueryParams(queryParams);
+  }
+
+  resetQueryString() {
+    let queryParams = this.props.queryParams;
+    queryParams.query = "";
     this.props.setQueryParams(queryParams);
   }
 
