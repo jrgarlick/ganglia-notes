@@ -23,7 +23,8 @@ class SearchApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedDoc: null
+      selectedDoc: null,
+      documentId: null
     };
   }
   render() {
@@ -93,6 +94,10 @@ class SearchApp extends Component {
       {row3}
       {busy}
     </div>;
+  }
+
+  loadDocument() {
+
   }
 
   handleDocUpdated(document) {

@@ -23,7 +23,7 @@ export default function MarkdownEditor(props) {
       <div>
         <div>
           <label>Title</label>
-          <input type="text" name="docTitle" class="form-control" value={props.title} onChange={handleTitleChange}/>
+          <input type="text" name="docTitle" className="form-control" value={props.title} onChange={handleTitleChange}/>
         </div>
         <ReactMde
           value={props.text}

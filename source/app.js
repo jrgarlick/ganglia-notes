@@ -30,9 +30,10 @@ const SearchAppContainer2 = (props) =>
 
 const RoutedApp = () =>
   <Router history={hashHistory}>
-    <Redirect from="/" to="/search" />
+    <Redirect from="/" to="/notes" />
     <Route path="/" component={App}>
-      <Route path="search" component={SearchAppContainer2} />
+      <Route path="notes" component={SearchAppContainer2} />
+      <Route path="notes/:documentId" component={SearchAppContainer2} />
       <Route path="about" component={About} />
       <Route path="history" component={History} />
       <Route path="contact" component={Contact} />

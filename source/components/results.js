@@ -1,4 +1,5 @@
 import React, { Component }  from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeLoadDocAction } from "../actions";
 import AnchorPass from "../widgets/anchorpass"
@@ -26,6 +27,7 @@ class Results extends Component {
       var title = hit.title.replace(/#|@/g, "");
       return <div key={hit.id} className="app_hit">
         <div><strong><AnchorPass onClick={this.dispatchLoadDocEvent.bind(this)} title={title} value={hit}/></strong></div>
+        <div><a href={`/#/notes/${hit.id}`}>{title}</a></div>
         <div className="app_vsp03 text-muted"><em><small>{hit.created_dt}</small></em></div>
       </div>;
     });

@@ -81,7 +81,8 @@ class SearchAppContainer extends Component {
     return <SearchApp queryParams={this.getQueryParams(this.props)}
                       searchResults={this.state.response}
                       setQueryParams={this.setQueryParams.bind(this)}
-                      busy={this.state.busy} />;
+                      busy={this.state.busy} 
+                      documentId={this.props.documentId}/>;
   }
 }
 

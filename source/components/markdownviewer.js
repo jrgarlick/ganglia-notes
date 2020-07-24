@@ -19,10 +19,16 @@ export default function MarkdownViewer(props) {
   return (
     <div className="mde-preview">
       <h1>{title}</h1>
-      <p><small><b>Last Updated:</b> {updatedDate} | <b>Created:</b> {createdDate} | {size} bytes</small></p> 
+      <p>
+        <small><b>Updated:</b> {updatedDate} | <b>Created:</b> {createdDate} | {size} bytes</small>
+      </p>
       <div className="mde-preview-content">
         <div dangerouslySetInnerHTML={{__html: converter.makeHtml(props.doc.text)}} />
       </div>
     </div>
   );
 };
+
+function joinList(list, joinChar) {
+  return list ? list.join(joinChar) : "";
+}
