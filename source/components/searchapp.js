@@ -103,7 +103,7 @@ class SearchApp extends Component {
   handleDocUpdated(document) {
     console.log("Document updated");
     var reqBody = JSON.stringify([document]);
-    fetch(solrConf.solrSearchUrl+"/update?commitWithin=1000", {
+    fetch(solrConf.solrSearchUrl+solrConf.journalPath+"/update?commitWithin=1000", {
       method: 'post',
       body: reqBody,
       headers: new Headers({
@@ -124,6 +124,13 @@ class SearchApp extends Component {
       alert("ERROR: " + error);   // FIXME very unfriendly
       throw error;    // for stacktrace in console
     });
+    
+    if (this.state.selectedDoc.text !== document.text) {
+      console.log("Changes detected. Saving previous revision");
+      this.props.historyService.saveDocumentState(this.state.selectedDoc);
+    } else {
+      console.log("No changes detected.");
+    }
 
     this.setState({
       selectedDoc: document

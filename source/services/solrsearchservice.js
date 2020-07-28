@@ -25,7 +25,7 @@ export function makeSearchService(conf) {
         word = word.substring(1);
         searchComponents.push("mentions:"+word);
       } else {
-        searchComponents.push("(text:"+word+" OR "+"title:"+word+")");
+        searchComponents.push("(text:"+word+"* OR "+"title:"+word+"*)");
       }
     });
     var queryString = searchComponents.join(" AND ");
@@ -99,7 +99,7 @@ export function makeSearchService(conf) {
     console.log(solrParams);
 
     // do the search. 'post' is required with a fetch() body. Solr doesn't mind
-    fetch(conf.solrSearchUrl+"/select?wt=json", {
+    fetch(conf.solrSearchUrl+conf.journalPath+"/select?wt=json", {
       method: 'post',
       body: reqBody,
       headers: new Headers({

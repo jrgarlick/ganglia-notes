@@ -4,9 +4,11 @@ import { Router, Route, Redirect, Link, hashHistory } from 'react-router';
 import NavBar from './components/navbar';
 import SearchAppContainer from './components/searchappcontainer';
 import { makeSearchService } from './services/solrsearchservice';
+import { HistoryService } from './services/historyservice.ts';
 import solrConf from './conf/solrconf';
 
 const searchService = makeSearchService(solrConf);
+const historyService = new HistoryService(solrConf);
 
 const App = (props) =>
   <div>
@@ -26,7 +28,7 @@ const History = () =>
 // set the searchService on the SearchAppContainer. 
 // need to explictly pass props.location from Router.
 const SearchAppContainer2 = (props) =>
-  <SearchAppContainer location={props.location} searchService={searchService}/>;
+  <SearchAppContainer location={props.location} searchService={searchService} historyService={historyService} />;
 
 const RoutedApp = () =>
   <Router history={hashHistory}>

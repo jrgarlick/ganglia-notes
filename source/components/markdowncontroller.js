@@ -24,7 +24,8 @@ class MarkdownController extends Component {
       activeDocument: null,
       viewMode: props.viewMode ? props.viewMode : "view",
       title: "",
-      text: ""
+      text: "",
+      originalText: ""
     }
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
@@ -84,10 +85,12 @@ class MarkdownController extends Component {
       previousDocument: this.state.activeDocument,
       activeDocument: {
         title: "",
-        text: ""
+        text: "",
+        originalText: ""
       },
       title: "",
       text: "",
+      originalText: "",
       viewMode: "edit"
     });
   }
