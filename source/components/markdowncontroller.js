@@ -1,5 +1,6 @@
 import update from 'react-addons-update';
 import React, { Component }  from 'react';
+import { useRouteMatch } from "react-router";
 import PropTypes from 'prop-types';
 import QueryInput from './queryinput';
 import Stats from './stats';
@@ -9,6 +10,9 @@ import MarkdownViewer from './markdownviewer';
 import MarkdownEditor from './markdowneditor';
 import Pager from './pager';
 import ErrorBoundary from './errorboundary';
+import MarkdownEditorToolbar from './markdowneditortoolbar';
+import solrConf from "../conf/solrconf";
+import { JournalService } from "../services/JournalService.ts";
 import { SET_FILTER_ACTION,
          CLEAR_FILTERS_ACTION,
          SET_QUERY_ACTION,
@@ -22,48 +26,59 @@ class MarkdownController extends Component {
     console.log(props);
     this.state = {
       activeDocument: null,
-      viewMode: props.viewMode ? props.viewMode : "view",
+      viewMode: props.viewMode ? props.viewMode : "new",
       title: "",
       text: "",
-      originalText: ""
+      originalText: "",
+      documentId: props.documentId
     }
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
+    this.journalService = new JournalService(solrConf);
   }
-  
+
   static getDerivedStateFromProps(props, state) {
-    if (state.viewMode === "view" && props.doc) {
-      return {
-        activeDocument: props.doc,
-        title: props.doc.title,
-        text: props.doc.text
-      };
-    }
-    return null;
+    console.log("Updating Markdown Controller Props:");
+    console.log(props);
+    return this.journalService.loadDocument(this.state.documentId, this.loadDocument.bind(this));
+    // if (state.viewMode === "view" && props.doc) {
+    //   return {
+    //     activeDocument: props.doc,
+    //     title: props.doc.title,
+    //     text: props.doc.text
+    //   };
+    // }
+    // return null;
   }
 
   render() {
     let toolbar = null;
     let documentPane = null;
-    
-     if (!this.state.activeDocument) {
-      return <div className="edit-toolbar">
-        <div><button className="btn" onClick={this.newDocument.bind(this)}>New</button></div>
-      </div>;
-    }
-
     let viewMode = this.state.viewMode;
 
+    // let documentId = this.props.match.params.documentId;
+
+    // let match = useRouteMatch("/notes/:documentId");
+    // let documentId = match.params.documentId;
+    
+     if (!this.state.activeDocument) {
+      return <MarkdownEditorToolbar 
+                viewMode={"new"}
+                onNewButtonClick={this.newDocument.bind(this)} />;
+    }
+
+
+    toolbar = <MarkdownEditorToolbar 
+                viewMode={viewMode}
+                onNewButtonClick={this.newDocument.bind(this)}
+                onCancelButtonClick={this.cancelEditDocument.bind(this)} 
+                onEditButtonClick={this.editDocument.bind(this)}
+                onSaveButtonClick={this.saveDocument.bind(this)}/>
+
     if (this.state.activeDocument && viewMode === "view") {
-      toolbar = <div className="edit-toolbar">
-        <div><button className="btn" onClick={this.newDocument.bind(this)}>New</button> <button className="btn" onClick={this.editDocument.bind(this)}>Edit</button></div>
-      </div>;
       documentPane = <MarkdownViewer doc={this.state.activeDocument}/>
 
     } else if (this.state.activeDocument && viewMode === "edit") {
-      toolbar = <div className="edit-toolbar">
-        <div><button className="btn" onClick={this.saveDocument.bind(this)}>Save</button> <button className="btn" onClick={this.cancelEditDocument.bind(this)}>Cancel</button></div>
-      </div>;
       documentPane = 
         <MarkdownEditor
           title={this.state.title}
@@ -77,6 +92,18 @@ class MarkdownController extends Component {
       {documentPane}
       {toolbar}
     </div>;
+  }
+
+  loadDocument(doc) {
+    console.log("Journal Service Document");
+    console.log(doc);
+
+    return({
+      previousDocument: this.state.activeDocument,
+      activeDocument: doc,
+      title: doc.title,
+      text: doc.text
+    });
   }
 
   newDocument() {
@@ -145,13 +172,13 @@ class MarkdownController extends Component {
 
   parseTags(prefix, title, tags) {
     let parsedTags = [];
-    let tagPatternString = "\\"+prefix+"(\\w{3}\\w*)";
+    let tagPatternString = "(^|\\s+)\\"+prefix+"(\\w{3}\\w*)";
     let tagPattern = new RegExp(tagPatternString,"g");
     [title, tags].forEach((item) => {
       item.split("\n").forEach((line) => {
         let result;
         while(result = tagPattern.exec(line)) {
-          parsedTags.push(result[1].toLowerCase());
+          parsedTags.push(result[2].toLowerCase());
         }
       })
     });

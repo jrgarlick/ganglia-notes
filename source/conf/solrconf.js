@@ -9,11 +9,11 @@ const solrConf = {
   },
   facetQueries: {
     "date_range": {
-      "Today": "created_dt:[NOW-1DAY/DAY TO NOW]",
-      "This Week": "created_dt:[NOW-7DAY/DAY TO NOW]",
-      "Last Week": "created_dt:[NOW-14DAY/DAY TO NOW-7DAY/DAY]",
-      "This Month": "created_dt:[NOW-1MONTH/DAY TO NOW]",
-      "This Year": "created_dt:[NOW-1YEAR/DAY TO NOW]"
+      "Today": "updated_dt:[NOW/DAY TO NOW/DAY+1DAY]",
+      "This Week": "updated_dt:[NOW/DAY-7DAYS TO NOW/DAY+1DAY]",
+      "Last Week": "updated_dt:[NOW/DAY-14DAYS TO NOW/DAY-7DAYS]",
+      "This Month": "updated_dt:[NOW/DAY-1MONTH TO NOW/DAY+1DAY]",
+      "Last Month": "updated_dt:[NOW/DAY-2MONTH TO NOW/DAY-1MONTH]"
     }
   },
   pageSize: 10,

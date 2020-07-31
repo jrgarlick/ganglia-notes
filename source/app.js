@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, Redirect, Link, hashHistory } from 'react-router';
 import NavBar from './components/navbar';
 import SearchAppContainer from './components/searchappcontainer';
+import SearchApp from './components/searchapp';
 import { makeSearchService } from './services/solrsearchservice';
 import { HistoryService } from './services/historyservice.ts';
 import solrConf from './conf/solrconf';
@@ -19,6 +20,12 @@ const App = (props) =>
 const About = () =>
   <h1>About</h1>;
 
+let Tasks = (props) => {
+  let taskId = props.params.taskId;
+  console.log(props);
+  return <div><h1>Tasks</h1><p>{taskId}</p></div>;
+}
+
 const Contact = () =>
   <h1>Contact</h1>;
 
@@ -27,15 +34,19 @@ const History = () =>
 
 // set the searchService on the SearchAppContainer. 
 // need to explictly pass props.location from Router.
-const SearchAppContainer2 = (props) =>
-  <SearchAppContainer location={props.location} searchService={searchService} historyService={historyService} />;
+const SearchAppContainer2 = (props) => {
+  console.log(props);
+  return <SearchAppContainer params={props.params} location={props.location} searchService={searchService} historyService={historyService} />;
+}
 
 const RoutedApp = () =>
   <Router history={hashHistory}>
     <Redirect from="/" to="/notes" />
     <Route path="/" component={App}>
-      <Route path="notes" component={SearchAppContainer2} />
-      <Route path="notes/:documentId" component={SearchAppContainer2} />
+      <Route exact path="notes" component={SearchAppContainer2} />
+      <Route exact path="notes/:documentId" component={SearchAppContainer2} />
+      <Route path="tasks" component={Tasks} />
+      <Route exact path="tasks/:taskId" component={Tasks} />
       <Route path="about" component={About} />
       <Route path="history" component={History} />
       <Route path="contact" component={Contact} />

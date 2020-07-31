@@ -82,8 +82,8 @@ class SearchAppContainer extends Component {
                       searchResults={this.state.response}
                       setQueryParams={this.setQueryParams.bind(this)}
                       busy={this.state.busy} 
-                      documentId={this.props.documentId}
-                      historyService={this.props.historyService}/>;
+                      historyService={this.props.historyService}
+                      documentId={this.props.params.documentId}/>;
   }
 }
 

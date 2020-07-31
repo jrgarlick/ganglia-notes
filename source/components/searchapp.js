@@ -24,7 +24,7 @@ class SearchApp extends Component {
     super(props);
     this.state = {
       selectedDoc: null,
-      documentId: null
+      documentId: props.documentId
     };
   }
   render() {
@@ -77,7 +77,7 @@ class SearchApp extends Component {
 
           <div className="col-sm-10">
             <ErrorBoundary>
-              <MarkdownController doc={this.state.selectedDoc} onDocumentChange={this.handleDocUpdated.bind(this)} />
+              <MarkdownController documentId={this.state.documentId} />
             </ErrorBoundary>
           </div>
         </div>;
@@ -125,7 +125,7 @@ class SearchApp extends Component {
       throw error;    // for stacktrace in console
     });
     
-    if (this.state.selectedDoc.text !== document.text) {
+    if (this.state.selectedDoc && (this.state.selectedDoc.text !== document.text)) {
       console.log("Changes detected. Saving previous revision");
       this.props.historyService.saveDocumentState(this.state.selectedDoc);
     } else {
