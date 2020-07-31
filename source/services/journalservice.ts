@@ -7,7 +7,7 @@ export class JournalService {
     this.errorHandler = errorHandler;
   }
 
-  loadDocument(documentId, setDocument) {
+  loadDocument(documentId, loadCallback) {
     var response = fetch(this.solrConf.solrSearchUrl+this.solrConf.journalPath+"/select?q=id%3A"+documentId, {
       method: 'get',
       headers: new Headers({
@@ -16,26 +16,23 @@ export class JournalService {
     })
     .then((response) => {
       if (response.ok) {
-        var solrResponse = response.json();
-        if (solrResponse.numFound === 1) {
-          document = solrResponse.docs[0];
-        }
-        console.log("JSON Document");
-        console.log(document);
-
-        setDocument(document);
+        return(response.json());
       } else {
         throw "not ok";
+      } 
+    })
+    .then((solrResponse) => {
+      if (solrResponse.response.numFound === 1) {
+        const solrDoc = solrResponse.response.docs[0];
+        loadCallback(solrDoc);
       }
     })
     .catch(this.errorHandler);
-
-    console.log(response);
   }
 
   saveDocument(document) {
     var reqBody = JSON.stringify([document]);
-    fetch(solrConf.solrSearchUrl+solrConf.journalPath+"/update?commitWithin=1000", {
+    fetch(this.solrConf.solrSearchUrl+this.solrConf.journalPath+"/update?commitWithin=1000", {
       method: 'post',
       body: reqBody,
       headers: new Headers({

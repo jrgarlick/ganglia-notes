@@ -26,8 +26,8 @@ class Results extends Component {
     const results = this.props.searchResults.map((hit) => {
       var title = hit.title.replace(/#|@/g, "");
       return <div key={hit.id} className="app_hit">
-        <div><strong><AnchorPass onClick={this.dispatchLoadDocEvent.bind(this)} title={title} value={hit}/></strong></div>
-        <div><Link to={`/notes/${hit.id}`}>{title}</Link></div>
+        {/* <div><strong><AnchorPass onClick={this.dispatchLoadDocEvent.bind(this)} title={title} value={hit}/></strong></div> */}
+        <div><strong><Link to={{pathname:`/notes/${hit.id}`}}>{title}</Link></strong></div>
         <div className="app_vsp03 text-muted"><em><small>{hit.created_dt}</small></em></div>
       </div>;
     });

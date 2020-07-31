@@ -10,7 +10,7 @@ export default function MarkdownEditorToolbar(props) {
         <div>
           <button className="btn" onClick={props.onNewButtonClick}>New</button>&nbsp;
           <button className="btn" onClick={props.onEditButtonClick}>Edit</button>&nbsp;
-          <button className="btn" onClick={props.onViewHistoryButtonClick}>View History</button>&nbsp;
+          <button className="btn" onClick={props.onViewHistoryButtonClick}>History</button>&nbsp;
           <button className="btn" onClick={props.onDeleteButtonClick}>Delete</button>&nbsp;
         </div>;
 
@@ -18,7 +18,7 @@ export default function MarkdownEditorToolbar(props) {
       toolbar = 
         <div>
           <button className="btn" onClick={props.onSaveButtonClick}>Save</button>&nbsp;
-          <button className="btn" onClick={props.onSaveButtonClick}>Cancel</button>&nbsp;
+          <button className="btn" onClick={props.onCancelButtonClick}>Cancel</button>&nbsp;
         </div>;
     }
 

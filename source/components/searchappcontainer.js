@@ -70,11 +70,13 @@ class SearchAppContainer extends Component {
   }
 
   setQueryParams(queryParams) {
-    this.context.router.push({ query: {
-      q: queryParams.query,
-      filt: queryParams.filters,
-      page: queryParams.page
-    }});
+    this.context.router.push({ 
+      pathname: this.context.router.location.pathname,
+      query: {
+        q: queryParams.query,
+        filt: queryParams.filters,
+        page: queryParams.page
+      }});
   }
 
   render() {

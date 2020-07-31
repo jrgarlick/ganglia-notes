@@ -77,11 +77,10 @@ class SearchApp extends Component {
 
           <div className="col-sm-10">
             <ErrorBoundary>
-              <MarkdownController documentId={this.state.documentId} />
+              <MarkdownController documentId={this.props.documentId} searchRefresh={this.refreshFilters.bind(this)}/> 
             </ErrorBoundary>
           </div>
         </div>;
-
       }
     }
 
@@ -94,10 +93,6 @@ class SearchApp extends Component {
       {row3}
       {busy}
     </div>;
-  }
-
-  loadDocument() {
-
   }
 
   handleDocUpdated(document) {
@@ -159,6 +154,10 @@ class SearchApp extends Component {
     let queryParams = this.props.queryParams;
     queryParams.query = "";
     this.props.setQueryParams(queryParams);
+  }
+
+  refreshFilters() {
+    this.props.setQueryParams(this.props.queryParams);
   }
 
   handleActions(actions) {

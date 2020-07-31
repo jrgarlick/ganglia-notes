@@ -37,31 +37,23 @@ class MarkdownController extends Component {
     this.journalService = new JournalService(solrConf);
   }
 
-  static getDerivedStateFromProps(props, state) {
-    console.log("Updating Markdown Controller Props:");
-    console.log(props);
-    return this.journalService.loadDocument(this.state.documentId, this.loadDocument.bind(this));
-    // if (state.viewMode === "view" && props.doc) {
-    //   return {
-    //     activeDocument: props.doc,
-    //     title: props.doc.title,
-    //     text: props.doc.text
-    //   };
-    // }
-    // return null;
+  componentDidMount() {
+    this.loadDocument();
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      documentId: newProps.documentId
+    });
+    this.loadDocument();
   }
 
   render() {
     let toolbar = null;
     let documentPane = null;
     let viewMode = this.state.viewMode;
-
-    // let documentId = this.props.match.params.documentId;
-
-    // let match = useRouteMatch("/notes/:documentId");
-    // let documentId = match.params.documentId;
-    
-     if (!this.state.activeDocument) {
+  
+    if (!this.state.activeDocument) {
       return <MarkdownEditorToolbar 
                 viewMode={"new"}
                 onNewButtonClick={this.newDocument.bind(this)} />;
@@ -94,16 +86,27 @@ class MarkdownController extends Component {
     </div>;
   }
 
-  loadDocument(doc) {
-    console.log("Journal Service Document");
-    console.log(doc);
-
-    return({
-      previousDocument: this.state.activeDocument,
-      activeDocument: doc,
-      title: doc.title,
-      text: doc.text
-    });
+  loadDocument() {
+    var documentId = this.state.documentId;
+    console.log("markdown controller did mount "+documentId)
+    if (documentId) {
+      this.setState({isLoading: true});
+      console.log("calling journal service");
+      this.journalService.loadDocument(
+        documentId, 
+        (doc) => {
+          console.log("loaded docuement:");
+          console.log(doc);
+          this.setState({
+            viewMode: "view",
+            previousDocument: this.state.activeDocument,
+            activeDocument: doc,
+            title: doc.title,
+            text: doc.text,
+            isLoading: false
+          });
+        });
+    }
   }
 
   newDocument() {
@@ -142,19 +145,22 @@ class MarkdownController extends Component {
     console.log("saveDocument");
 
     var newDoc = JSON.parse(JSON.stringify(this.state.activeDocument));
+    delete newDoc._version_;
     newDoc.title = this.state.title;
     newDoc.text = this.state.text;
     newDoc.tags_ss = this.parseTags('#', this.state.title, this.state.text);
     newDoc.mentions = this.parseTags('@', this.state.title, this.state.text);
     newDoc.updated_dt = new Date().toISOString();
 
-    this.props.onDocumentChange(newDoc);
+    // this.props.onDocumentChange(newDoc);
+    this.journalService.saveDocument(newDoc);
 
     this.setState({
       activeDocument: newDoc,
       viewMode: "view"
     });
 
+    this.props.refreshSearch();
     console.log(newDoc);
   }
 
