@@ -35,18 +35,40 @@ class MarkdownController extends Component {
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.journalService = new JournalService(solrConf);
+    // this.loadDocument();
   }
 
   componentDidMount() {
     this.loadDocument();
   }
 
+  // static getDerivedStateFromProps(newProps, state) {
+  //   console.log("MarkdownController.getDerivedStateFromProps");
+  //   console.log(newProps);
+  //   if (state.documentId !== newProps.documentId) {
+  //     return({
+  //       documentId: newProps.documentId
+  //     });
+  //     this.loadDocument();
+  //   } else {
+  //     return {};
+  //   }
+  // }
+
   componentWillReceiveProps(newProps) {
-    this.setState({
-      documentId: newProps.documentId
-    });
-    this.loadDocument();
+    console.log("MarkdownController.componentWillReceiveProps");
+    console.log(newProps);
+    // if (this.state.documentId !== newProps.documentId) {
+      this.setState({
+        documentId: newProps.documentId
+      });
+      this.loadDocument();
+    // }
   }
+
+  // componentDidUpdate() {
+  //   this.loadDocument();
+  // }
 
   render() {
     let toolbar = null;
@@ -95,7 +117,7 @@ class MarkdownController extends Component {
       this.journalService.loadDocument(
         documentId, 
         (doc) => {
-          console.log("loaded docuement:");
+          console.log("loaded document:");
           console.log(doc);
           this.setState({
             viewMode: "view",
@@ -160,7 +182,7 @@ class MarkdownController extends Component {
       viewMode: "view"
     });
 
-    this.props.refreshSearch();
+    this.props.searchRefresh();
     console.log(newDoc);
   }
 

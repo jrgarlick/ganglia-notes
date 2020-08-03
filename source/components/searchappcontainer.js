@@ -6,7 +6,8 @@ class SearchAppContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      response: null
+      response: null,
+      documentId: props.params.documentId
     };
   }
 
@@ -18,11 +19,20 @@ class SearchAppContainer extends Component {
     this.doSearch(this.props);
   }
 
+  // componentDidUpdate(prevProps) {
+  //   if (this.props.location.search !== prevProps.location.search) {
+  //     this.doSearch(this.props);
+  //   } 
+  //   if (this.props.params.documentId !== prevProps.params.documentId) {
+  //     this.setState({documentId: this.props.params.documentId});
+  //   }
+  // }
   /*
    * something has changed, probably the location. Update the search results.
    */
   componentWillReceiveProps(newProps) {
     this.doSearch(newProps);
+    this.setState({documentId: newProps.params.documentId});
   }
 
   /*
@@ -80,12 +90,13 @@ class SearchAppContainer extends Component {
   }
 
   render() {
+    console.log("SearchAppContainer.render() - "+this.state.documentId);
     return <SearchApp queryParams={this.getQueryParams(this.props)}
                       searchResults={this.state.response}
                       setQueryParams={this.setQueryParams.bind(this)}
                       busy={this.state.busy} 
                       historyService={this.props.historyService}
-                      documentId={this.props.params.documentId}/>;
+                      documentId={this.state.documentId}/>;
   }
 }
 
