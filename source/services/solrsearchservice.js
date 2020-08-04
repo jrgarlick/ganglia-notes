@@ -19,10 +19,10 @@ export function makeSearchService(conf) {
     var searchComponents = [];
     words.forEach((word) => {
       if (word.startsWith('#')) {
-        word = word.substring(1);
+        word = word.substring(1).toLowerCase();
         searchComponents.push("tags_ss:"+word);
       } else if (word.startsWith('@')) {
-        word = word.substring(1);
+        word = word.substring(1).toLowerCase();
         searchComponents.push("mentions:"+word);
       } else {
         searchComponents.push("(text:"+word+"* OR "+"title:"+word+"*)");
