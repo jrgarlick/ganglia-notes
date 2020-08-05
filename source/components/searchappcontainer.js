@@ -31,7 +31,9 @@ class SearchAppContainer extends Component {
    * something has changed, probably the location. Update the search results.
    */
   componentWillReceiveProps(newProps) {
-    this.doSearch(newProps);
+    if (newProps.location.search !== this.props.location.search) {
+      this.doSearch(newProps);
+    }
     this.setState({documentId: newProps.params.documentId});
   }
 
