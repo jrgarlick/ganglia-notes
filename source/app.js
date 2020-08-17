@@ -41,8 +41,8 @@ const SearchAppContainer2 = (props) => {
 
 const RoutedApp = () =>
   <Router history={hashHistory}>
-    <Redirect from="/" to="/notes" />
     <Route path="/" component={App}>
+      <Route path="" component={History} />
       <Route exact path="notes" component={SearchAppContainer2} />
       <Route exact path="notes/:documentId" component={SearchAppContainer2} />
       <Route path="tasks" component={Tasks} />

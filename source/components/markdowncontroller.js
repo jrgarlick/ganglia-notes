@@ -30,45 +30,21 @@ class MarkdownController extends Component {
       title: "",
       text: "",
       originalText: "",
-      documentId: props.documentId
     }
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.journalService = new JournalService(solrConf);
-    // this.loadDocument();
   }
 
   componentDidMount() {
-    this.loadDocument();
+    this.loadDocument(this.props.documentId);
   }
 
-  // static getDerivedStateFromProps(newProps, state) {
-  //   console.log("MarkdownController.getDerivedStateFromProps");
-  //   console.log(newProps);
-  //   if (state.documentId !== newProps.documentId) {
-  //     return({
-  //       documentId: newProps.documentId
-  //     });
-  //     this.loadDocument();
-  //   } else {
-  //     return {};
-  //   }
-  // }
-
-  componentWillReceiveProps(newProps) {
-    console.log("MarkdownController.componentWillReceiveProps");
-    console.log(newProps);
-    // if (this.state.documentId !== newProps.documentId) {
-      this.setState({
-        documentId: newProps.documentId
-      });
-      this.loadDocument();
-    // }
+  componentDidUpdate(prevProps) {
+    if (this.props.documentId !== prevProps.documentId) {
+      this.loadDocument(this.props.documentId);
+    }
   }
-
-  // componentDidUpdate() {
-  //   this.loadDocument();
-  // }
 
   render() {
     let toolbar = null;
@@ -108,12 +84,10 @@ class MarkdownController extends Component {
     </div>;
   }
 
-  loadDocument() {
-    var documentId = this.state.documentId;
-    console.log("markdown controller did mount "+documentId)
+  loadDocument(documentId) {
+    // var documentId = this.state.documentId;
     if (documentId) {
       this.setState({isLoading: true});
-      console.log("calling journal service");
       this.journalService.loadDocument(
         documentId, 
         (doc) => {
@@ -132,7 +106,6 @@ class MarkdownController extends Component {
   }
 
   newDocument() {
-    console.log("New Document");
     this.setState({
       previousDocument: this.state.activeDocument,
       activeDocument: {
@@ -148,7 +121,6 @@ class MarkdownController extends Component {
   }
 
   editDocument() {
-    console.log("Edit Document");
     this.setState({
       previousDocument: this.state.activeDocument,
       viewMode: "edit"
@@ -159,6 +131,9 @@ class MarkdownController extends Component {
     this.setState({
       activeDocument: this.state.previousDocument,
       previousDocument: null,
+      title: this.state.previousDocument.title,
+      text: this.state.previousDocument.text,
+      originalText: this.state.previousDocument.text,
       viewMode: "view"
     });
   }
@@ -175,14 +150,21 @@ class MarkdownController extends Component {
     newDoc.updated_dt = new Date().toISOString();
 
     // this.props.onDocumentChange(newDoc);
-    this.journalService.saveDocument(newDoc);
+    this.journalService.saveDocument(newDoc, 
+      () => {
+        this.props.searchRefresh();
+        this.setState({
+          previousDocument: newDoc,
+          activeDocument: newDoc,
+          title: newDoc.title,
+          text: newDoc.text,
+          originalText: newDoc.text,
+          viewMode: "view"
+        });
+      });
 
-    this.setState({
-      activeDocument: newDoc,
-      viewMode: "view"
-    });
 
-    this.props.searchRefresh();
+    // this.props.searchRefresh();
     console.log(newDoc);
   }
 

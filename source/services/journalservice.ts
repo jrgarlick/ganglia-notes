@@ -30,7 +30,7 @@ export class JournalService {
     .catch(this.errorHandler);
   }
 
-  saveDocument(document) {
+  saveDocument(document, onSuccessCallback) {
     var reqBody = JSON.stringify([document]);
     fetch(this.solrConf.solrSearchUrl+this.solrConf.journalPath+"/update?commitWithin=1000", {
       method: 'post',
@@ -48,6 +48,11 @@ export class JournalService {
     })
     .then((response) => {
       console.log(response);
+    })
+    .then((response) => {
+      if (onSuccessCallback) {
+        onSuccessCallback();
+      }
     })
     .catch(this.errorHandler);
   }

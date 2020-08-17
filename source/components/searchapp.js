@@ -28,15 +28,6 @@ class SearchApp extends Component {
     };
   }
   
-  componentWillReceiveProps(newProps) {
-    if (this.state.documentId !== newProps.documentId) {
-      console.log("Searchapp.componentWillReceiveProps:"+newProps.documentId);
-      this.setState({
-        documentId: newProps.documentId
-      });
-    }
-  }
-
   render() {
     let row2 = null;
     let row3 = null;
@@ -59,20 +50,20 @@ class SearchApp extends Component {
 
                 <h5 className="app_vsp15">Dates:</h5>
                 <FacetList facets={sr.facets.date_range}
-                handleActions={this.handleActions.bind(this)}
-                fieldname="created_dt" />
+                  handleActions={this.handleActions.bind(this)}
+                  fieldname="created_dt" />
 
                 <h5 className="app_vsp15">Tags:</h5>
                 <FacetList facets={sr.facets.tags}
-                handleActions={this.handleActions.bind(this)}
-                fieldname="tags_ss"
-                multiSelect="true" />
+                  handleActions={this.handleActions.bind(this)}
+                  fieldname="tags_ss"
+                  multiSelect="true" />
 
                 <h5 className="app_vsp15">Mentions:</h5>
                 <FacetList facets={sr.facets.mentions}
-                handleActions={this.handleActions.bind(this)}
-                fieldname="mentions"
-                multiSelect="true" />
+                  handleActions={this.handleActions.bind(this)}
+                  fieldname="mentions"
+                  multiSelect="true" />
               </div>
             </Accordion>
 
@@ -82,12 +73,12 @@ class SearchApp extends Component {
               len={sr.results.length}
               handleActions={this.handleActions.bind(this)}
               pageSize={sr.pageSize} />
-            <Results searchResults={sr.results} handleActions={this.handleDocActions.bind(this)} />
+            <Results searchResults={sr.results} />
           </div>
 
           <div className="col-sm-10">
             <ErrorBoundary>
-              <MarkdownController documentId={this.state.documentId} searchRefresh={this.refreshFilters.bind(this)}/> 
+              <MarkdownController documentId={this.props.documentId} searchRefresh={this.refreshFilters.bind(this)}/> 
             </ErrorBoundary>
           </div>
         </div>;
@@ -103,55 +94,6 @@ class SearchApp extends Component {
       {row3}
       {busy}
     </div>;
-  }
-
-  handleDocUpdated(document) {
-    // console.log("Document updated");
-    // var reqBody = JSON.stringify([document]);
-    // fetch(solrConf.solrSearchUrl+solrConf.journalPath+"/update?commitWithin=1000", {
-    //   method: 'post',
-    //   body: reqBody,
-    //   headers: new Headers({
-    //   		'Content-Type': 'application/json'
-    //     })
-    // })
-    // .then((response) => {
-    //   if (response.ok) {
-    //     return response.json();
-    //   } else {
-    //     throw "not ok";
-    //   }
-    // })
-    // .then((response) => {
-    //   console.log(response);
-    // })
-    // .catch((error) => {
-    //   alert("ERROR: " + error);   // FIXME very unfriendly
-    //   throw error;    // for stacktrace in console
-    // });
-    
-    // if (this.state.selectedDoc && (this.state.selectedDoc.text !== document.text)) {
-    //   console.log("Changes detected. Saving previous revision");
-    //   this.props.historyService.saveDocumentState(this.state.selectedDoc);
-    // } else {
-    //   console.log("No changes detected.");
-    // }
-
-    // this.setState({
-    //   selectedDoc: document
-    // });
-  }
-
-  handleDocActions(actions) {
-    // console.log("HandleDocActions");
-    // console.log(actions);
-    // actions.forEach(act => {
-    //   // this.props.selectedDoc(act.doc);
-    //   this.setState({
-    //     selectedDoc: act.doc
-    //   })
-    //   console.log(act.doc);
-    // });
   }
 
   resetFilters() {
