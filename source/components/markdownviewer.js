@@ -14,7 +14,7 @@ export default function MarkdownViewer(props) {
   const createdDate = moment(props.doc.created_dt+"").format('YYYY-MM-DD hh:mm:ss a');
   const updatedDate = moment(props.doc.updated_dt+"").format('YYYY-MM-DD hh:mm:ss a');
   const title = props.doc.title.replace(/#|@/g, "");
-  const size = props.doc.text.length;
+  const size = props.doc.text ? props.doc.text.length : 0;
 
   return (
     <div className="mde-preview">
