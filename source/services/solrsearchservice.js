@@ -1,4 +1,5 @@
 import capitalize from 'capitalize';
+import StringUtils from "../utils/stringUtils";
 
 /*
  * conf should have the properties:
@@ -13,17 +14,17 @@ import capitalize from 'capitalize';
 export function makeSearchService(conf) {
   return (queryParams, setSearchResults) => {
     // convert queryParams into Solr params
-
     var rawQueryString = queryParams.query;
-    var words = rawQueryString.split(/\s+/);
+
     var searchComponents = [];
+    var words = rawQueryString.split(/\s+/);
     words.forEach((word) => {
       if (word.startsWith('#')) {
         word = word.substring(1).toLowerCase();
-        searchComponents.push("tags_ss:"+word);
+        searchComponents.push("(tags_ss:"+word+"*)");
       } else if (word.startsWith('@')) {
         word = word.substring(1).toLowerCase();
-        searchComponents.push("mentions:"+word);
+        searchComponents.push("(mentions:"+word+"*)");
       } else {
         searchComponents.push("(text:"+word+"* OR "+"title:"+word+"*)");
       }
@@ -137,7 +138,7 @@ function makeSearchResults(r, setFilters, conf) {
           facets[key] = r.facets[key].buckets.map(x => {
             const filter = conf.facetFields[key] + ":\"" + x.val + "\"";
             return {
-              label: capitalize(x.val),
+              label: x.val,
               count: x.count,
               filter: filter,
               selected: setFilters.includes(filter)

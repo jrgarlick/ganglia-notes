@@ -8,6 +8,7 @@ export default function buildConverter() {
         tasklists: true,
         simpleLineBreaks: true,
         requireSpaceBeforeHeadingText: true,
-        disableForced4SpacesIndentedSublists: true
+        disableForced4SpacesIndentedSublists: true,
+        literalMidWordUnderscores: true
     });
 }

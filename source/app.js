@@ -7,6 +7,7 @@ import SearchApp from './components/searchapp';
 import { makeSearchService } from './services/solrsearchservice';
 import { HistoryService } from './services/historyservice.ts';
 import solrConf from './conf/solrconf';
+import TasksContainer from './components/tasks/taskscontainer';
 
 const searchService = makeSearchService(solrConf);
 const historyService = new HistoryService(solrConf);
@@ -39,14 +40,18 @@ const SearchAppContainer2 = (props) => {
   return <SearchAppContainer params={props.params} location={props.location} searchService={searchService} historyService={historyService} />;
 }
 
+const tasksComponent = (props) => {
+  return <TasksContainer params={props.params}/>;
+}
+
 const RoutedApp = () =>
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <Route path="" component={History} />
       <Route exact path="notes" component={SearchAppContainer2} />
       <Route exact path="notes/:documentId" component={SearchAppContainer2} />
-      <Route path="tasks" component={Tasks} />
-      <Route exact path="tasks/:taskId" component={Tasks} />
+      <Route path="tasks" component={tasksComponent} />
+      <Route exact path="tasks/:taskPath" component={tasksComponent} />
       <Route path="about" component={About} />
       <Route path="history" component={History} />
       <Route path="contact" component={Contact} />

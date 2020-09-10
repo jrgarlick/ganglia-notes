@@ -10,7 +10,7 @@ const NavBar = (props) =>
       <div id="navbar" className="collapse navbar-collapse">
         <ul className="nav navbar-nav">
           <li><Link activeClassName="app_underline" to="/notes">Notes</Link></li>
-          <li><Link activeClassName="app_underline" to="/tasks">Kanban</Link></li>
+          <li><Link activeClassName="app_underline" to="/tasks">Tasks</Link></li>
           <li><Link activeClassName="app_underline" to="/history">Calendar</Link></li>
           <li><Link activeClassName="app_underline" to="/contact">Insights</Link></li>
         </ul>

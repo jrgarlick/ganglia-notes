@@ -1,6 +1,8 @@
 import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import StickyLink from "../widgets/stickylink";
+import GangliaNoteTitle from "../widgets/GangliaNoteTitle";
+import DateFormatter from "../widgets/DateFormatter";
 
 /*
  * A component implementing a simple results list.
@@ -16,10 +18,9 @@ class Results extends Component {
 
   render() {
     const results = this.props.searchResults.map((hit) => {
-      var title = hit.title.replace(/#|@/g, "");
       return <div key={hit.id} className="app_hit">
-        <div><strong><StickyLink to={`/notes/${hit.id}`}>{title}</StickyLink></strong></div>
-        <div className="app_vsp03 text-muted"><em><small>{hit.created_dt}</small></em></div>
+        <div><strong><StickyLink to={`/notes/${hit.id}`}><GangliaNoteTitle title={hit.title}/></StickyLink></strong></div>
+        <div className="app_vsp03 text-muted"><em><small><DateFormatter date={hit.created_dt}/></small></em></div>
       </div>;
     });
 

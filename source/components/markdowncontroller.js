@@ -13,6 +13,7 @@ import ErrorBoundary from './errorboundary';
 import MarkdownEditorToolbar from './markdowneditortoolbar';
 import solrConf from "../conf/solrconf";
 import { JournalService } from "../services/JournalService.ts";
+import StringUtils from "../utils/stringUtils";
 import { SET_FILTER_ACTION,
          CLEAR_FILTERS_ACTION,
          SET_QUERY_ACTION,
@@ -145,11 +146,10 @@ class MarkdownController extends Component {
     delete newDoc._version_;
     newDoc.title = this.state.title;
     newDoc.text = this.state.text;
-    newDoc.tags_ss = this.parseTags('#', this.state.title, this.state.text);
-    newDoc.mentions = this.parseTags('@', this.state.title, this.state.text);
+    newDoc.tags_ss = StringUtils.parseTags('#', this.state.title, this.state.text);
+    newDoc.mentions = StringUtils.parseTags('@', this.state.title, this.state.text);
     newDoc.updated_dt = new Date().toISOString();
 
-    // this.props.onDocumentChange(newDoc);
     this.journalService.saveDocument(newDoc, 
       () => {
         this.props.searchRefresh();
@@ -162,10 +162,6 @@ class MarkdownController extends Component {
           viewMode: "view"
         });
       });
-
-
-    // this.props.searchRefresh();
-    console.log(newDoc);
   }
 
   onTitleChange(title) {
@@ -180,23 +176,6 @@ class MarkdownController extends Component {
     });
   }
 
-  parseTags(prefix, title, tags) {
-    let parsedTags = [];
-    let tagPatternString = "(^|\\s+)\\"+prefix+"(\\w{3}\\w*)";
-    let tagPattern = new RegExp(tagPatternString,"g");
-    [title, tags].forEach((item) => {
-      item.split("\n").forEach((line) => {
-        let result;
-        while(result = tagPattern.exec(line)) {
-          parsedTags.push(result[2].toLowerCase());
-        }
-      })
-    });
-    
-    return parsedTags.filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
-  }
 }
 
 MarkdownController.propTypes = {
