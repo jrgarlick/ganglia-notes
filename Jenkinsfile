@@ -1,8 +1,9 @@
 pipeline {
-  agent any
+//   agent any
     
-  tools { nodejs "node" }
-    
+//   tools { nodejs "node" }
+  agent { docker { image 'node:14-alpine' } }    
+
   stages {
         
     stage('Checkout project') {
@@ -13,7 +14,7 @@ pipeline {
      
     stage('Install Dependencies') {
       steps {
-        sh 'echo npm install'
+        sh 'npm install'
         // sh 'npm build'
       }
     }  
