@@ -5,27 +5,23 @@ pipeline {
     
   stages {
         
-    stage('Git') {
+    stage('Checkout project') {
       steps {
           checkout scm
       }
     }
      
-    stage('Build') {
+    stage('Install Dependencies') {
       steps {
-        nodejs "node" {
-          sh 'npm install'
-          // sh 'npm build'
-        }
+        sh 'npm install'
+        // sh 'npm build'
       }
     }  
     
             
     stage('Test') {
       steps {
-        nodejs "node" {
-          sh 'echo npm test'
-        }
+        sh 'echo npm test'
       }
     }
 
