@@ -1,4 +1,5 @@
 export class HistoryService {
+  solrConf: any;
   constructor(jsonConfig) {
     this.solrConf = jsonConfig;
   }

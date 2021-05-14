@@ -1,4 +1,6 @@
 export class JournalService {
+  solrConf: any;
+  errorHandler: (error: any) => never;
   constructor(jsonConfig, errorHandler = (error) => {
       alert("ERROR: " + error);   // FIXME very unfriendly
       throw error;    // for stacktrace in console
