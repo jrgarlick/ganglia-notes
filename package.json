@@ -21,7 +21,7 @@
     "bootstrap": "^3.3.6",
     "capitalize": "^1.0.0",
     "css-loader": "^3.6.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "react": "^16.13.1",
     "react-addons-update": "^15.6.2",
     "react-dom": "^16.13.1",
